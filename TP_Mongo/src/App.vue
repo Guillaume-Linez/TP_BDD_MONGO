@@ -19,11 +19,11 @@
       </form>
     </div>
   </template>
-  
+
   <script>
   import { ref } from 'vue';
   import axios from 'axios';
-  
+
   export default {
     setup() {
       const membre = ref({
@@ -32,7 +32,7 @@
         email: ''
         // Ajoutez d'autres propriétés ici selon votre schéma de membre
       });
-  
+
       const submitForm = async () => {
         try {
           await axios.post('http://localhost:3000/api/data/Membre', membre.value);
@@ -44,7 +44,7 @@
           alert('Erreur lors de la création du membre');
         }
       };
-  
+
       return {
         membre,
         submitForm
@@ -52,4 +52,3 @@
     }
   };
   </script>
-  
