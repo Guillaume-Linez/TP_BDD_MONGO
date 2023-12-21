@@ -1,54 +1,65 @@
 <template>
-    <div>
-      <h1>Créer un nouveau membre</h1>
-      <form @submit.prevent="submitForm">
-        <div>
-          <label for="nom">Nom:</label>
-          <input type="text" id="nom" v-model="membre.nom" required>
-        </div>
-        <div>
-          <label for="prenom">Prénom:</label>
-          <input type="text" id="prenom" v-model="membre.prenom" required>
-        </div>
-        <div>
-          <label for="email">Email:</label>
-          <input type="email" id="email" v-model="membre.email" required>
-        </div>
-        <!-- Ajoutez d'autres champs ici selon votre schéma de membre -->
-        <button type="submit">Créer Membre</button>
-      </form>
-    </div>
-  </template>
+  <div id="app">
+    <!-- Header de l'application -->
+    <header>
+      <h1>Mon Application Vue</h1>
+      <nav>
+        <!-- Liens de navigation -->
+        <router-link to="/creer-membre">Créer Membre</router-link> |
+        <router-link to="/creer-groupe">Créer Groupe</router-link>
+        <!-- Ajoutez d'autres liens de navigation au besoin -->
+      </nav>
+    </header>
 
-  <script>
-  import { ref } from 'vue';
-  import axios from 'axios';
+    <!-- Contenu de la page chargé dynamiquement en fonction de la route -->
+    <main>
+      <router-view/>
+    </main>
 
-  export default {
-    setup() {
-      const membre = ref({
-        nom: '',
-        prenom: '',
-        email: ''
-        // Ajoutez d'autres propriétés ici selon votre schéma de membre
-      });
+    <!-- Footer de l'application -->
+    <footer>
+      <p>&copy; 2023 Mon Application Vue</p>
+    </footer>
+  </div>
+</template>
 
-      const submitForm = async () => {
-        try {
-          await axios.post('http://localhost:3000/api/data/Membre', membre.value);
-          alert('Membre créé avec succès!');
-          // Réinitialisez le formulaire ou redirigez l'utilisateur
-          membre.value = { nom: '', prenom: '', email: '' };
-        } catch (error) {
-          console.error('Il y a eu une erreur lors de la création du membre', error);
-          alert('Erreur lors de la création du membre');
-        }
-      };
+<script>
+export default {
+  name: 'App'
+  // Pas de logique spécifique dans ce composant puisque c'est le layout principal
+};
+</script>
 
-      return {
-        membre,
-        submitForm
-      };
-    }
-  };
-  </script>
+<style>
+/* Style global de l'application */
+#app {
+  text-align: center;
+}
+
+header {
+  background-color: #f5f5f5;
+  padding: 10px 0;
+}
+
+nav a {
+  margin: 0 10px;
+  text-decoration: none;
+  color: #333;
+}
+
+nav a.router-link-active {
+  color: #42b983;
+}
+
+main {
+  margin: 20px 0;
+}
+
+footer {
+  background-color: #f5f5f5;
+  padding: 10px 0;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+</style>
