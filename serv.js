@@ -94,6 +94,33 @@ app.get('/api/data/Groupe', async (req, res) => {
       // client.close();
     }
   });
+// Route POST pour créer un nouveau membre
+app.post('/api/data/Membre', async (req, res) => {
+  const client = new MongoClient(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
+  try {
+    await client.connect();
+    const database = client.db();
+    const collection = database.collection('Membre');
+    
+    // Créez un nouveau membre avec les données reçues dans le corps de la requête (req.body)
+    const membre = req.body;
+    const result = await collection.insertOne(membre);
+    
+    // Vérifiez si l'insertion a réussi
+    if (result.acknowledged === true) {
+      console.log(`Nouveau membre créé avec l'ID: ${result.insertedId}`);
+      res.status(201).json(result); // Envoie une réponse avec le document créé
+    } else {
+      throw new Error('Échec de l\'insertion du membre');
+    }
+  } catch (error) {
+    console.error('Erreur lors de la création du membre', error);
+    res.status(500).send('Erreur serveur lors de la création du membre');
+  } finally {
+    // Assurez-vous de fermer la connexion à la base de données une fois que vous avez terminé
+    await client.close();
+  }
+});
 
 app.listen(port, () => {
   console.log(`Serveur en cours d'exécution sur le port ${port}`);
