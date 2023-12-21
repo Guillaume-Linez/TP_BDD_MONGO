@@ -1,7 +1,7 @@
 // src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router';
-import CreateMembreForm from '../components/CreateMembreForm.vue';
-import CreateGroupeForm from '../components/CreateGroupeForm.vue';
+import CreateMembreForm from '../src/components/CreateMemberForm.vue';
+import CreateGroupeForm from '../src/components/CreateGroupeForm.vue';
 // Importez d'autres composants que vous souhaitez utiliser comme pages
 
 const routes = [
@@ -19,7 +19,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(""),
   routes
 });
 
