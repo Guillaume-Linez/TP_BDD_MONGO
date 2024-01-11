@@ -148,6 +148,32 @@ app.post('/api/data/Groupe', async (req, res) => {
     await client.close();
   }
 });
+app.post('/api/data/Materiel', async (req, res) => {
+  const client = new MongoClient(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
+  try {
+    await client.connect();
+    const database = client.db();
+    const collection = database.collection('Materiel');
+    
+    // Créez un nouveau materiel avec les données reçues dans le corps de la requête (req.body)
+    const materiel = req.body;
+    const result = await collection.insertOne(materiel);
+    
+    // Vérifiez si l'insertion a réussi
+    if (result.acknowledged === true) {
+      console.log(`Nouveau materiel créé avec l'ID: ${result.insertedId}`);
+      res.status(201).json(result); // Envoie une réponse avec le document créé
+    } else {
+      throw new Error('Échec de l\'insertion du materiel');
+    }
+  } catch (error) {
+    console.error('Erreur lors de la création du materiel', error);
+    res.status(500).send('Erreur serveur lors de la création du materiel');
+  } finally {
+    // Assurez-vous de fermer la connexion à la base de données une fois que vous avez terminé
+    await client.close();
+  }
+});
 
 
 app.listen(port, () => {

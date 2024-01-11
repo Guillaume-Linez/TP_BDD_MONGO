@@ -4,7 +4,7 @@
       <form @submit.prevent="submitForm">
         <div>
           <label for="marque">marque du matériel:</label>
-          <input type="text" id="Marquue" v-model="materiel.Marque" required>
+          <input type="text" id="Marque" v-model="materiel.Marque" required>
         </div>
         <div>
           <label for="numéro de série">numéro de série:</label>
@@ -31,7 +31,7 @@
   export default {
     setup() {
       const materiel = ref({
-        Numéro_série: '',
+        Numéro_serie: '',
         Marque: '',
         Modèle: '',
         Type: '',
@@ -41,7 +41,7 @@
   
       const submitForm = async () => {
         try {
-          const response = await axios.post('http://localhost:3000/api/data/materiel', materiel.value);
+          const response = await axios.post('http://localhost:3000/api/data/Materiel', materiel.value);
           alert('materiel créé avec succès avec ID: ' + response.data.insertedId);
           // Réinitialisez le formulaire ou redirigez l'utilisateur
           materiel.value = { Numéro_serie: '', Marque: '', Modèle: '',Type:'',Prix:'' };

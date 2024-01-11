@@ -1,6 +1,6 @@
 // src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router';
-import CreateMembreForm from '../src/components/CreateMembreForm.vue';
+import CreateMembreForm from '../src/components/CreateMemberForm.vue';
 import CreateGroupeForm from '../src/components/CreateGroupeForm.vue';
 import AddMaterialForm from '../src/components/AddMaterial.vue';
 // Importez d'autres composants que vous souhaitez utiliser comme pages
