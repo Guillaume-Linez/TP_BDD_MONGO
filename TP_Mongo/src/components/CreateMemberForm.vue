@@ -3,16 +3,16 @@
       <h1>Créer un nouveau membre</h1>
       <form @submit.prevent="submitForm">
         <div>
-          <label for="nom">Nom:</label>
-          <input type="text" id="nom" v-model="membre.nom" required>
+          <label for="Nom">Nom:</label>
+          <input type="text" id="Nom" v-model="membre.Nom" required>
         </div>
         <div>
-          <label for="prenom">Prénom:</label>
-          <input type="text" id="prenom" v-model="membre.prenom" required>
+          <label for="Prenom">Prénom:</label>
+          <input type="text" id="Prenom" v-model="membre.Prenom" required>
         </div>
         <div>
-          <label for="email">Email:</label>
-          <input type="email" id="email" v-model="membre.email" required>
+          <label for="Email">Email:</label>
+          <input type="email" id="Email" v-model="membre.Email" required>
         </div>
         <!-- Ajoutez d'autres champs ici selon votre schéma de membre -->
         <button type="submit">Créer Membre</button>
@@ -27,9 +27,9 @@
   export default {
     setup() {
       const membre = ref({
-        nom: '',
-        prenom: '',
-        email: ''
+        Nom: '',
+        Prenom: '',
+        Email: ''
         // Ajoutez d'autres propriétés ici selon votre schéma de membre
       });
 
@@ -38,7 +38,7 @@
           await axios.post('http://localhost:3000/api/data/Membre', membre.value);
           alert('Membre créé avec succès!');
           // Réinitialisez le formulaire ou redirigez l'utilisateur
-          membre.value = { nom: '', prenom: '', email: '' };
+          membre.value = { Nom: '', Prenom: '', Email: '' };
         } catch (error) {
           console.error('Il y a eu une erreur lors de la création du membre', error);
           alert('Erreur lors de la création du membre');
