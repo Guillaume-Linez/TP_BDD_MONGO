@@ -6,8 +6,9 @@
       <nav>
         <!-- Liens de navigation -->
         <router-link to="/creer-membre">Créer Membre</router-link> |
-        <router-link to="/creer-groupe">Créer Groupe</router-link>
-        <router-link to="/ajouter-materiel">Ajouter Matériel</router-link>
+        <router-link to="/creer-groupe">Créer Groupe</router-link> |
+        <router-link to="/ajouter-materiel">Ajouter Matériel</router-link> |
+        <router-link to="/ajouter-user">Ajouter User</router-link>
         <!-- Ajoutez d'autres liens de navigation au besoin -->
       </nav>
     </header>
@@ -19,7 +20,7 @@
 
     <!-- Footer de l'application -->
     <footer>
-      <p>&copy; 2023 Mon Application Vue</p>
+      <p>&copy; 2024 Mon Application Vue</p>
     </footer>
   </div>
 </template>

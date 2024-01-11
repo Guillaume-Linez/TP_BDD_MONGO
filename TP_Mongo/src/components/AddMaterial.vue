@@ -15,6 +15,12 @@
           <input type="text" id="Modèle" v-model="materiel.Modèle" required>
         </div>
         <div>
+          <label for="Type">Type :</label>
+          <select id="Type" v-model="materiel.Type" required>
+            <option v-for="item in modeleList" :key="item" :value="item">{{ item }}</option>
+          </select>
+        </div>
+        <div>
           <label for="Prix">prix:</label>
           <input type="text" id="Prix" v-model="materiel.Prix" required>
         </div>
@@ -52,6 +58,7 @@
       };
   
       return {
+        modeleList: ['écran', 'clavier', 'souris', 'tour', 'laptop', 'enceintes'],
         materiel,
         submitForm
       };

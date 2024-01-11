@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import CreateMembreForm from '../src/components/CreateMemberForm.vue';
 import CreateGroupeForm from '../src/components/CreateGroupeForm.vue';
 import AddMaterialForm from '../src/components/AddMaterial.vue';
+import AddUserForm from '../src/components/AddUser.vue'
 // Importez d'autres composants que vous souhaitez utiliser comme pages
 
 const routes = [
@@ -20,6 +21,11 @@ const routes = [
     path: '/ajouter-materiel',
     name: 'AddMaterial',
     component: AddMaterialForm
+  },
+  {
+    path: '/ajouter-user',
+    name: 'AddUser',
+    component: AddUserForm
   },
 ];
 
