@@ -15,6 +15,15 @@
           <input type="text" id="Modèle" v-model="materiel.Modèle" required>
         </div>
         <div>
+          <label for="groupe-select">Choisissez un groupe:</label>
+          <select id="groupe-select" v-model="selectedGroupe">
+            <option value="" disabled>Sélectionnez un groupe</option>
+            <option v-for="groupe in groupes" :key="groupe._id" :value="groupe._id">
+              {{ groupe.Nom }}
+            </option>
+          </select>
+        </div>
+        <div>
           <label for="Type">Type :</label>
           <select id="Type" v-model="materiel.Type" required>
             <option v-for="item in modeleList" :key="item" :value="item">{{ item }}</option>
@@ -31,11 +40,13 @@
   </template>
   
   <script>
-  import { ref } from 'vue';
+  import { ref, onMounted } from 'vue';
   import axios from 'axios';
   
   export default {
     setup() {
+      const groupes = ref([]);
+      const selectedGroupe = ref('');
       const materiel = ref({
         Numéro_serie: '',
         Marque: '',
@@ -44,6 +55,18 @@
         Prix:''
         // Ajoutez d'autres propriétés ici selon votre schéma de materiel
       });
+
+      const fetchGroupes = async () => {
+        try {
+          const response = await axios.get('http://localhost:3000/api/data/Groupe');
+          groupes.value = response.data;
+        } catch (error) {
+          console.error('Erreur lors du chargement des groupes:', error);
+        }
+      };
+
+      // Appelée lors du montage du composant
+      onMounted(fetchGroupes);
   
       const submitForm = async () => {
         try {
@@ -58,6 +81,8 @@
       };
   
       return {
+        groupes,
+        selectedGroupe,
         modeleList: ['écran', 'clavier', 'souris', 'tour', 'laptop', 'enceintes'],
         materiel,
         submitForm
