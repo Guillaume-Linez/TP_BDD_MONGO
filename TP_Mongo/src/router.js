@@ -3,7 +3,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 import CreateMembreForm from '../src/components/CreateMemberForm.vue';
 import CreateGroupeForm from '../src/components/CreateGroupeForm.vue';
 import AddMaterialForm from '../src/components/AddMaterial.vue';
-import AddUserForm from '../src/components/AddUser.vue'
+import AddUserForm from '../src/components/AddUser.vue';
+import SignIn from '../src/components/SignIn.vue';
 // Importez d'autres composants que vous souhaitez utiliser comme pages
 
 const routes = [
@@ -26,6 +27,11 @@ const routes = [
     path: '/ajouter-user',
     name: 'AddUser',
     component: AddUserForm
+  },
+  {
+    path: '/',
+    name: 'SignIn',
+    component: SignIn
   },
 ];
 
