@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <!-- Header de l'application -->
-    <header>
+    <header v-if="isConnected">
       <h1>Mon Application Vue</h1>
       <nav>
         <!-- Liens de navigation -->
@@ -26,9 +26,21 @@
 </template>
 
 <script>
+import Cookies from 'js-cookie';
 export default {
-  name: 'App'
+  name: 'App',
   // Pas de logique spécifique dans ce composant puisque c'est le layout principal
+  mounted() {
+		const cookie =  Cookies.get("connect");
+    if(cookie){
+      this.isConnected = true;
+    }
+	},
+  data: function(){
+    return{
+      isConnected:false
+    }
+  }
 };
 </script>
 
