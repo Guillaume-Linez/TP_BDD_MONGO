@@ -5,6 +5,7 @@ import CreateGroupeForm from '../src/components/CreateGroupeForm.vue';
 import AddMaterialForm from '../src/components/AddMaterial.vue';
 import AddUserForm from '../src/components/AddUser.vue';
 import SignIn from '../src/components/SignIn.vue';
+import SearchOrders from '../src/components/SearchOrders.vue';
 // Importez d'autres composants que vous souhaitez utiliser comme pages
 
 const routes = [
@@ -27,6 +28,11 @@ const routes = [
     path: '/ajouter-user',
     name: 'AddUser',
     component: AddUserForm
+  },
+  {
+    path: '/filtre',
+    name: 'SearchOrders',
+    component: SearchOrders
   },
   {
     path: '/',

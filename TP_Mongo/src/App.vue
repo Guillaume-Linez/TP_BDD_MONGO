@@ -8,7 +8,8 @@
         <router-link to="/creer-membre">Créer Membre</router-link> |
         <router-link to="/creer-groupe">Créer Groupe</router-link> |
         <router-link to="/ajouter-materiel">Ajouter Matériel</router-link> |
-        <router-link to="/ajouter-user">Ajouter User</router-link>
+        <router-link to="/ajouter-user">Ajouter User</router-link> |
+        <router-link to="/filtre">Filtre commandes</router-link>
         <!-- Ajoutez d'autres liens de navigation au besoin -->
       </nav>
     </header>

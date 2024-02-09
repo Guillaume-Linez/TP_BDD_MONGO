@@ -56,7 +56,7 @@ app.get('/api/data/Groupe', async (req, res) => {
   }
 });
 
-
+/*
   app.get('/api/data/Commande', async (req, res) => {
     try {
       const startTime = process.hrtime();
@@ -78,6 +78,7 @@ app.get('/api/data/Groupe', async (req, res) => {
       // client.close();
     }
   });
+*/
   app.get('/api/data/Materiel', async (req, res) => {
     try {
       const startTime = process.hrtime();
@@ -200,7 +201,7 @@ app.post('/api/data/Materiel', async (req, res) => {
     await client.close();
   }
 });
-app.post('/api/login', async (req, res) => {
+app.post('/api/User', async (req, res) => {
   const client = new MongoClient(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
   try {
     await client.connect();
@@ -253,6 +254,89 @@ app.post('/api/data/User', async (req, res) => {
     await client.close();
   }
 });
+app.get('/api/search/clients', async (req, res) => {
+  const searchTerm = req.query.q || '';
+  try {
+    const client = new MongoClient(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
+    await client.connect();
+    const database = client.db();
+    const collection = database.collection('Membre');
+    const clients = await collection.find({
+      Nom: new RegExp(searchTerm, 'i')// Recherche insensible à la casse
+    }).toArray();
+    res.json(clients);
+  } catch (error) {
+    console.error('Erreur lors de la recherche des clients', error);
+    res.status(500).send('Erreur serveur');
+  } finally {
+    //client.close();
+  }
+});
+app.get('/api/search/activeMembers', async (req, res) => {
+  const searchTerm = req.query.q || '';
+  try {
+    const client = new MongoClient(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
+    await client.connect();
+    const database = client.db();
+    const collection = database.collection('Membre');
+    const activeMembers = await collection.find({
+      Nom: new RegExp(searchTerm, 'i') // Recherche insensible à la casse
+    }).toArray();
+    res.json(activeMembers);
+  } catch (error) {
+    console.error('Erreur lors de la recherche des membres actifs', error);
+    res.status(500).send('Erreur serveur');
+  } finally {
+    //client.close();
+  }
+});
+app.get('/api/search/materials', async (req, res) => {
+  const searchTerm = req.query.q || '';
+  try {
+    const client = new MongoClient(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
+    await client.connect();
+    const database = client.db();
+    const collection = database.collection('Materiel');
+    const materials = await collection.find({
+      Marque: new RegExp(searchTerm, 'i') // Recherche insensible à la casse
+    }).toArray();
+    res.json(materials);
+  } catch (error) {
+    console.error('Erreur lors de la recherche des matériaux', error);
+    res.status(500).send('Erreur serveur');
+  } finally {
+    //client.close();
+  }
+});
+app.get('/api/data/Commande', async (req, res) => {
+  const { startDate, endDate, clientMember, activeMember, material } = req.query;
+  const query = {};
+
+  if (startDate || endDate) {
+      query.Date = {};
+      if (startDate) query.Date.$gte = new Date(startDate);
+      if (endDate) query.Date.$lte = new Date(endDate);
+  }
+
+  if (clientMember) query.Nom_membre_client = new RegExp(clientMember, 'i');
+  if (activeMember) query.Nom_membre_actif = new RegExp(activeMember, 'i');
+  if (material) query['Liste_Materiel'] = { $elemMatch: { Nom: new RegExp(material, 'i') } };
+
+  try {
+      const client = new MongoClient(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
+      await client.connect();
+      const database = client.db();
+      const collection = database.collection('Commande');
+      const data = await collection.find(query).toArray();
+      res.json(data);
+  } catch (error) {
+      console.error('Erreur lors de la récupération des données', error);
+      res.status(500).send('Erreur serveur');
+  } finally {
+      //await client.close();
+  }
+});
+
 
 
 app.listen(port, () => {
