@@ -4,12 +4,11 @@ const app = express();
 const port = 3000;
 const cors = require('cors');
 
-const mongoURI = 'mongodb://localhost:27037/tp'; // Remplacez par l'URL de votre base MongoDB
+const mongoURI = 'mongodb://localhost:27020/tp';
 
 app.use(cors());
 app.use(express.json());
 
-// Route pour récupérer toutes les données
 app.get('/api/data/Membre', async (req, res) => {
   try {
     const startTime = process.hrtime();
@@ -17,11 +16,10 @@ app.get('/api/data/Membre', async (req, res) => {
     await client.connect();
 
     const database = client.db();
-    const collection = database.collection('Membre'); // Remplacez par le nom de votre collection
-
+    const collection = database.collection('Membre'); 
     const data = await collection.find({}).toArray();
-    const endTime = process.hrtime(startTime); // Enregistrez le temps de fin
-    const elapsedTimeInMs = endTime[0] * 1000 + endTime[1] / 1e6; // Calculez la différence en millisecondes
+    const endTime = process.hrtime(startTime); 
+    const elapsedTimeInMs = endTime[0] * 1000 + endTime[1] / 1e6; 
     console.log(`Temps écoulé pour la récupération des données : ${elapsedTimeInMs} ms`);
     res.json(data);
   } catch (error) {
@@ -199,6 +197,33 @@ app.post('/api/data/Materiel', async (req, res) => {
     res.status(500).send('Erreur serveur lors de la création du materiel');
   } finally {
     // Assurez-vous de fermer la connexion à la base de données une fois que vous avez terminé
+    await client.close();
+  }
+});
+app.post('/api/login', async (req, res) => {
+  const client = new MongoClient(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
+  try {
+    await client.connect();
+    const database = client.db();
+    const collection = database.collection('User');
+
+    // Récupérez le courriel et le mot de passe de la requête
+    const { email, password } = req.body;
+
+    // Recherchez l'utilisateur dans la base de données
+    const user = await collection.findOne({ email, password });
+
+    if (user) {
+      // Si l'utilisateur est trouvé, redirigez vers la page créer groupe
+      res.redirect('/creer-groupe');
+    } else {
+      // Si les identifiants sont incorrects, renvoyez un message d'erreur
+      res.status(401).send('Identifiants incorrects');
+    }
+  } catch (error) {
+    console.error('Erreur lors de la connexion', error);
+    res.status(500).send('Erreur serveur');
+  } finally {
     await client.close();
   }
 });

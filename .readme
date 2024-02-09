@@ -1,0 +1,81 @@
+Etape 1
+docker network create tp_phase1
+Etape 2
+docker run -d --name mongo-node2 --net tp_phase1 mongo --replSet "rs0" --shardsvr
+docker run -d --name mongo-node3 --net tp_phase1 mongo --replSet "rs0" --shardsvr
+docker run -d --name mongo-node4 --net tp_phase1 mongo --replSet "rs0" --shardsvr
+Etape 3
+docker exec -it mongo-node2 mongosh
+Etape 4
+rs.initiate(
+...   {
+...     _id : "rs0",
+...     members: [
+...       { _id: 0, host: "mongo-node2:27017" },
+...       { _id: 1, host: "mongo-node3:27017" },
+...       { _id: 2, host: "mongo-node4:27017" }
+...     ]
+...   }
+... )
+Etape 5
+docker run -d --name cfg1 --net tp_phase1 mongo --replSet cfgset --configsvr
+docker run -d --name cfg2 --net tp_phase1 mongo --replSet cfgset --configsvr
+docker run -d --name cfg3 --net tp_phase1 mongo --replSet cfgset --configsvr
+Etape 6 :
+docker exec -it cfg1 mongosh mongodb://cfg1:27019
+Etape 7 :
+rs.initiate(
+  {
+    _id: "cfgset",
+    configsvr: true,
+    members: [
+      { _id: 0, host: "cfg1:27019" },
+      { _id: 1, host: "cfg2:27019" },
+      { _id: 2, host: "cfg3:27019" }
+    ]
+  }
+)
+Etape 8 : 
+docker run -d --name mongos --net tp_phase1 -p 27017:27017 mongo mongos --configdb cfgset/cfg1:27019,cfg2:27019,cfg3:27019
+Etape 9 : 
+docker exec -it mongos mongosh
+
+
+
+test 2
+1)
+docker-compose up -d
+2)
+docker exec -it mongo1 mongo --port 27034
+3)
+
+rs.initiate({
+  _id: 'rs0',
+  members: [
+    { _id: 0, host: 'mongo1:27035' },
+    { _id: 1, host: 'mongo2:27036' },
+    { _id: 2, host: 'mongo3:27037' }
+  ]
+})
+
+
+---read me
+
+
+docker exec -it mongo1 /bin/bash
+
+mongo --port 27017
+
+rs.initiate(
+  {
+    _id: 'rs0',
+    members: [
+      { _id: 0, host: "mongo1:27017" },
+      { _id: 1, host: "mongo2:27017" },
+      { _id: 2, host: "mongo3:27017" }
+    ]
+  }
+)
+
+
+mongodb://localhost:27035,localhost:27036,localhost:27037/?replicaSet=rs0
