@@ -1,17 +1,17 @@
 <template>
-<div>
-    <button @click="deleteCookie">disconnect</button>
-    <button @click="setCookie">connect</button>
-</div>
+  <div>
+    <button @click="deleteCookie">Déconnexion</button>
+    <button @click="setCookie">Connexion</button>
+  </div>
   <div>
     <h1>Bienvenue sur la page web !</h1>
     <form @submit.prevent="submitForm">
       <div>
-        <label for="user">Mail:</label>
+        <label for="Mail">Mail:</label>
         <input type="text" id="Mail" v-model="user.Mail" required>
       </div>
       <div>
-        <label for="mot de passe">MDP:</label>
+        <label for="MDP">MDP:</label>
         <input type="password" id="MDP" v-model="user.MDP" required>
       </div>
       <button type="submit">Se connecter</button>
@@ -23,12 +23,12 @@
 import Cookies from 'js-cookie';
 import { ref } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 export default {
   setup() {
-
-    let isConnected = false
-
+    const router = useRouter();
+    const isConnected = ref(false);
     const user = ref({
       Mail: '',
       MDP: ''
@@ -36,23 +36,27 @@ export default {
 
     const deleteCookie = () => {
       Cookies.remove('connect');
+      isConnected.value = false;
       location.reload();
-    }
+    };
 
     const setCookie = () => {
-        Cookies.set("connect", 'value');
-        isConnected = true
-        console.log("connect", isConnected)
-        location.reload();
-    }
+      Cookies.set("connect", 'value');
+      isConnected.value = true; 
+      console.log("connect", isConnected.value);
+      location.reload();
+    };
 
     const submitForm = async () => {
       try { 
         const response = await axios.post('http://localhost:3000/api/login', user.value);
-        alert('Connexion réussie');
-        const cookie =  Cookies.set("connect", 'value');
-        this.isConnected = true
-        this.$router.push('/ajouter-materiel'); // Redirige vers la page d'accueil après la connexion
+        if (response.data.success) {
+          Cookies.set("connect", 'value');
+          isConnected.value = true;
+          router.push('/ajouter-materiel');
+        } else {
+          alert('Identifiants incorrects ou erreur serveur');
+        }
       } catch (error) {
         console.error('Erreur lors de la tentative de connexion', error);
         alert('Identifiants incorrects ou erreur serveur');
@@ -64,13 +68,8 @@ export default {
       submitForm,
       deleteCookie,
       setCookie,
-      isConnected
+      isConnected 
     };
-  },
-  data: function(){
-    return{
-    //   isConnected:false
-    }
   }
 };
 </script>
